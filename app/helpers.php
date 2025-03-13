@@ -9,8 +9,7 @@ function getMokaToken()
     return DB::table('moka_tokens')->latest('created_at')->value('access_token');
 }
 
-function insertApiErrorLog($name, $url, $method, $headers = null, $queryParams = null, $requestBody = null,
-    $statusCode, $responseBody)
+function insertApiErrorLog($name, $url, $method, $headers, $queryParams, $requestBody, $statusCode, $responseBody)
 {
     DB::table('log_api_errors')->insert([
         'name' => $name,

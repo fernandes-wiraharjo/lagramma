@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use App\Models\Category;
 
 class SyncMokaCategories extends Command
 {
@@ -28,16 +29,36 @@ class SyncMokaCategories extends Command
     public function handle()
     {
         $baseUrl = env('MOKA_API_URL');
+        $outletId = env('MOKA_OUTLET_ID');
         $token = getMokaToken();
+
+        if (!$token) {
+            Log::error('Failed to retrieve MOKA API token.');
+            return;
+        }
+
+        $url = "{$baseUrl}/v1/outlets/{$outletId}/categories?per_page=50";
 
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $token,
-        ])->get($baseUrl . '/categories');
+            'Accept' => 'application/json'
+        ])->get($url);
 
         if ($response->successful()) {
-            Log::info('Sync MOKA Product Categories successfully.', $categories);
-            $categories = $response->json();
-            //save data to db here...
+            $responseData = $response->json();
+            $categories = $responseData['data']['category'] ?? [];
+
+            foreach ($categories as $category) {
+                Category::updateOrCreate(
+                    ['moka_id_category' => $category['id']], // Unique identifier for update
+                    [
+                        'name'        => $category['name'],
+                        'description' => $category['description']
+                    ]
+                );
+            }
+
+            Log::info('Sync MOKA Product Categories successfully.');
         } else {
             $status = $response->status();
 
@@ -50,7 +71,6 @@ class SyncMokaCategories extends Command
                 }
             } else {
                 Log::error("Sync MOKA Product Categories API Error: HTTP {$status}");
-                // Log the error in the database
                 insertApiErrorLog('Sync MOKA Product Categories', $baseUrl . '/categories', 'GET', null, null, null, $status, $response->body());
             }
         }
