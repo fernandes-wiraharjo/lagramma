@@ -53,7 +53,8 @@ class SyncMokaCategories extends Command
                     ['moka_id_category' => $category['id']], // Unique identifier for update
                     [
                         'name'        => $category['name'],
-                        'description' => $category['description']
+                        'description' => $category['description'],
+                        'updated_at'  => now()
                     ]
                 );
             }
