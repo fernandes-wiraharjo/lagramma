@@ -15,7 +15,7 @@ function insertApiErrorLog($name, $url, $method, $headers, $queryParams, $reques
         'name' => $name,
         'url' => $url,
         'method' => $method,
-        'headers' => $headers,
+        'header' => $headers,
         'request_param' => $queryParams,
         'request_body' => $requestBody,
         'status_code' => $statusCode,
@@ -68,7 +68,7 @@ function refreshMokaToken()
     } else {
         $status = $response->status();
         Log::error("Refresh MOKA API Token Error: HTTP {$status}");
-        insertApiErrorLog('Refresh MOKA API Token', "$baseUrl/oauth/token", 'POST', null, null, $credentials, $response->status(), $response->body());
+        insertApiErrorLog('Refresh MOKA API Token', "$baseUrl/oauth/token", 'POST', null, null, null, $response->status(), $response->body());
         return null;
     }
 }
