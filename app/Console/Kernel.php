@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->command('app:sync-moka-categories')->everyThirtyMinutes();
+        $schedule->command('app:sync-moka-modifiers')->everyThirtyMinutes();
     }
 
     /**

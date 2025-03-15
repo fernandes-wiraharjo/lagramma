@@ -72,7 +72,7 @@ class SyncMokaCategories extends Command
                 }
             } else {
                 Log::error("Sync MOKA Product Categories API Error: HTTP {$status}");
-                insertApiErrorLog('Sync MOKA Product Categories', $baseUrl . '/categories', 'GET', null, null, null, $status, $response->body());
+                insertApiErrorLog('Sync MOKA Product Categories', "{$baseUrl}/v1/outlets/outlet_id/categories", 'GET', null, null, null, $status, $response->body());
             }
         }
     }
