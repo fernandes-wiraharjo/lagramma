@@ -11,6 +11,7 @@ use App\Models\ProductVariantSalesType;
 use App\Models\ProductModifier;
 use App\Models\SalesType;
 use App\Models\Modifier;
+use App\Models\Category;
 
 class SyncMokaProducts extends Command
 {
