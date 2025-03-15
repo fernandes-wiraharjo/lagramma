@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Product;
 
 class Category extends Model
 {
@@ -21,4 +22,10 @@ class Category extends Model
         'created_at',
         'updated_at'
     ];
+
+    // Relationship: A Category has many Products
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'id_category');
+    }
 }
