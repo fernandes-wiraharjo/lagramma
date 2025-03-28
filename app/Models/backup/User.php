@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Backup;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class User extends Authenticatable
 {
@@ -22,12 +21,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role_id',
-        'is_active',
-        'created_by',
-        'updated_by',
-        'created_at',
-        'updated_at'
     ];
 
     /**
@@ -36,14 +29,17 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password'
+        'password',
+        'remember_token',
     ];
 
     /**
-     * Get the role of the user.
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
      */
-    public function role(): BelongsTo
-    {
-        return $this->belongsTo(Role::class);
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
 }
